@@ -18,7 +18,7 @@ export const routes = [
       {
         path: "index",
         component: () => import("szd-client-web/layout/home/home.vue"),
-        name: "首页",
+        name: "home",
         meta: {
           title: "首页",
           icon: "dashboard",

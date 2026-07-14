@@ -5,7 +5,7 @@
       <div :id="renderId" style="height: 100%" />
     </template>
     <template v-else>
-      <router-view />
+      <router-view :key="routerViewKey" />
     </template>
   </el-config-provider>
 </template>
@@ -13,6 +13,7 @@
 <script setup>
   import { computed, getCurrentInstance, onMounted, ref } from "vue";
   import store from "~store";
+  import { useRoute } from "vue-router";
   import qiankunMicro from "szd-client-web/client/common/qiankun/qiankunMicro";
   import szdRouter from "szd-client-web/client/common/utils/goRouter";
   import szdStoreSession from "szd-client-web/client/common/store/storeSession";
@@ -20,6 +21,8 @@
   import { lockALLOff } from "szd-client-web/client/common/tools/lock";
 
   const { appContext } = getCurrentInstance();
+  // 获取当前路由信息
+  const route = useRoute();
 
   //token值，用于比较是否更换
   const token = ref("");
@@ -28,6 +31,9 @@
   const isInQiankun = ref(window.__POWERED_BY_QIANKUN__);
   //动态Id
   const renderId = ref("renderMirco");
+  //是否刷新路由
+  const routerViewKey = ref("");
+  const routerViewFullPath = ref("");
 
   //获取微应用参数
   const props = defineProps({
@@ -36,7 +42,7 @@
       default: () => ({})
     }
   });
-  //是乾坤，非路由模式，主应用嵌套微应用
+  //是乾坤，调用模式：true路由模式，false主应用嵌套微应用
   const isRouterMicro = computed(() => {
     if (props.szdMircoProps && props.szdMircoProps.routerCode) {
       return false;
@@ -50,7 +56,7 @@
     if (isInQiankun.value) {
       loadQiankunStateChange();
     }
-    //是乾坤，非路由模式，主应用嵌套微应用
+    //是乾坤-主应用嵌套微应用
     if (window.__POWERED_BY_QIANKUN__ && !isRouterMicro.value) {
       renderId.value = "renderMirco" + props.szdMircoProps["routerCode"] + Date.now();
       szdRouter.renderComp({
@@ -75,7 +81,18 @@
     qiankunMicro.onGlobalStateChange(state => {
       if (state.handle === "clientNavTab") {
         //框架页签变化数据同步微应用VUEX内存
-        store.dispatch("frameTag/clientNavTab", state.szdMircoProps);
+        store.dispatch("frameTag/clientNavTab", state.szdMircoProps).then(res => {
+          if (res.visitedViews.length === 0 && route.fullPath) {
+            routerViewFullPath.value = route.fullPath;
+          }
+          if (state.szdMircoProps.name === route.name && res.visitedViews.length === 1 && routerViewFullPath.value === route.fullPath) {
+            routerViewFullPath.value = "";
+            routerViewKey.value = routerViewKey.value === "new" ? "" : "new";
+          }
+          if (res.visitedViews.length >= 1) {
+            routerViewFullPath.value = "";
+          }
+        });
       }
     }, true);
   };
