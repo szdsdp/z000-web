@@ -11,6 +11,7 @@
       v-model:data="dataList"
       v-model:page="tableParams.page"
       @handleRequest="handleRequestImp"
+      :callMethod="handleCallMethod"
       row-key="ebelp"
       border
       stripe />
@@ -30,7 +31,7 @@
           schCat: [
             { field: "kunnr", label: "客户", type: "string", noTo: true, required: true, help: { a: "CORE_CUST" } },
             { field: "vbeln", label: "销售订单", type: "string", noTo: true },
-            { field: "auart", label: "订单类型", type: "string", noTo: true, help: { a: "Z000_PP_SCDDCJ_ORDER_TYPE" } },
+            { field: "auart", label: "订单类型", type: "string", noTo: true, help: { a: "Z000_SD_ORDER_TYPE" } },
             { field: "vkorg", label: "销售组织", type: "string", noTo: true, required: true, help: { a: "Z000_MDM_ORG_SALE" } },
             { field: "dateRange", label: "创建日期", type: "date", whereOpt: "BT" }
           ]
@@ -100,6 +101,26 @@
       },
       handleRequestImp() {
         this.getList();
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await querySaleOrderSearch(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

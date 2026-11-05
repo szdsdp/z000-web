@@ -28,6 +28,8 @@
       <szd-input-form-item-col label="订单数量" :span="8" v-model="objData.header.orderQty" disabled />
       <szd-select-form-item-col label="单位" :span="8" v-model="objData.header.unit" baseField="CORE_UNIT" disabled clearable />
       <szd-input-form-item-col label="已发货数量" :span="8" v-model="objData.header.shippedQty" disabled />
+      <szd-input-form-item-col label="已收货数量" :span="8" v-model="objData.header.receivedQty" disabled />
+      <szd-input-form-item-col label="订单状态" :span="8" v-model="objData.header.orderStatus" disabled />
       <szd-input-form-item-col label="工艺路线编号" :span="8" v-model="objData.header.routingNo" disabled />
       <szd-input-form-item-col label="预留编号" :span="8" v-model="objData.header.resNo" disabled />
       <szd-date-form-item-col label="订单开始日期" :span="8" v-model="objData.header.startDate" disabled />

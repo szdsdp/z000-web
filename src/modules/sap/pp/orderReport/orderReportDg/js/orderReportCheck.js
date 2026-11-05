@@ -28,7 +28,7 @@ function submitFormCheckItem(objData, msgList) {
   }
   for (let i = 0; i < objData.itemList.length; i++) {
     let item = objData.itemList[i];
-    z000Tool.checkNull(msgList, item.operation, "行项目[" + item.itemNo + "]-活动编号不能为空");
+    z000Tool.checkNull(msgList, item.operNo, "行项目[" + item.itemNo + "]-工序编号不能为空");
     z000Tool.checkNull(msgList, item.yield, "行项目[" + item.itemNo + "]-产量不能为空");
   }
 }

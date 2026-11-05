@@ -36,7 +36,7 @@
           ranges: {}
         },
         schLay: {
-          layout: { report: "Z000_DEMO_MDM_01B", span: 8, more: 3 },
+          layout: { report: "Z000_DEMO_MDM_01A", span: 8, more: 3 },
           schCat: [
             { field: "cmpy", label: "公司代码", type: "string", help: { a: "CORE_CMPY", c: "cmpy" } },
             { field: "cmpyName", label: "公司名称", type: "string", whereOpt: "SP" },
@@ -45,7 +45,7 @@
           ]
         },
         tabLay: {
-          layout: { report: "Z000_DEMO_MDM_01B", selection: "2" },
+          layout: { report: "Z000_DEMO_MDM_01A", selection: "2" },
           toolbar: {
             btns: [
               { fCode: "add", label: "新增", icon: "Plus" },

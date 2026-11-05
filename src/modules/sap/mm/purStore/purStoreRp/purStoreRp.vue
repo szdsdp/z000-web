@@ -13,6 +13,7 @@
       @handleEvent="handleEventImp"
       @handleRowEvent="handleRowEventImp"
       @selection-change="handleSelRow"
+      :callMethod="handleCallMethod"
       row-key="bussId"
       border
       stripe />
@@ -37,6 +38,7 @@
             { field: "bussDocId", label: "业务单号", type: "string" },
             { field: "bussDate", label: "业务日期", type: "date" },
             { field: "bussStatus", label: "单据状态", type: "string", help: { a: "Z000_DOC_STAU" } },
+            { field: "bstp", label: "业务类型", type: "string", help: { a: "CORE_BSTP" } },
             { field: "cmpy", label: "公司代码", type: "string", help: { a: "CORE_CMPY" } },
             { field: "cstc", label: "部门", type: "string", help: { a: "CORE_CSTC" } },
             { field: "createTime", label: "创建日期", type: "date" }
@@ -51,38 +53,7 @@
             { field: "bussDocId", label: "业务单号", minWidth: 150, sort: true },
             { field: "bussDate", label: "业务日期", minWidth: 100, type: "date", sort: true },
             { field: "bussStatusName", label: "单据状态", minWidth: 100 },
-            {
-              field: "invCheckCount",
-              label: "已创建发票校验数量",
-              minWidth: 150,
-              align: "center",
-              type: "number",
-              numDec: 2
-            },
-            {
-              field: "invCheckAmt",
-              label: "已创建发票校验金额",
-              minWidth: 150,
-              align: "right",
-              type: "number",
-              numDec: 2
-            },
-            {
-              field: "sapInvCheckCount",
-              label: "SAP已校验数量",
-              minWidth: 130,
-              align: "center",
-              type: "number",
-              numDec: 2
-            },
-            {
-              field: "sapInvCheckAmt",
-              label: "SAP已校验金额",
-              minWidth: 130,
-              align: "right",
-              type: "number",
-              numDec: 2
-            },
+            { field: "bstpName", label: "业务类型", minWidth: 180 },
             { field: "cmpyName", label: "公司代码", minWidth: 150 },
             { field: "cstcName", label: "部门", minWidth: 150 },
             { field: "title", label: "业务标题", minWidth: 200 },
@@ -165,6 +136,26 @@
       },
       handleRow(row, option) {
         this.szdWf.goDoc(row.routerCode, row.bussId, option);
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await listApply(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

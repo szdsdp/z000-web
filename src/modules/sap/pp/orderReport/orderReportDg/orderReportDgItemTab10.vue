@@ -26,18 +26,18 @@
       <el-table-column :label="$t('行项目')" prop="itemNo" width="80" align="center" fixed="left">
         <template v-slot="scope">{{ scope.row.itemNo }}</template>
       </el-table-column>
-      <el-table-column label="活动编号" prop="operation" min-width="120">
+      <el-table-column label="工序编号" prop="operNo" min-width="120">
         <template v-slot:header>
-          <szd-table-col-header required label="活动编号" />
+          <szd-table-col-header required label="工序编号" />
         </template>
         <template v-slot="scope">
           <szd-input-desc
-            v-model="scope.row.operation"
+            v-model="scope.row.operNo"
             showHelp
             :help="{
               a: 'Z000_PP_SCDDCQ_PROCESS',
               b: scope.row,
-              c: ['operation-operNo'],
+              c: ['operNo-operNo'],
               d: [['orderNo', objData.header.aufnr]]
             }"
             :szdopt="SR.szdopt" />
@@ -96,13 +96,13 @@
         }).then(res => {
           if (res.data && res.data.length > 0) {
             for (let item of res.data) {
-              // operation 去重，已存在的工序不再添加
-              if (this.objData.itemList.some(r => r.operation === item.operNo)) {
+              // operNo 去重，已存在的工序不再添加
+              if (this.objData.itemList.some(r => r.operNo === item.operNo)) {
                 continue;
               }
               this.objData.itemList.push({
                 itemNo: 0,
-                operation: item.operNo,
+                operNo: item.operNo,
                 confText: item.operDesc || "",
                 yield: "",
                 scrap: "",

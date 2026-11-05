@@ -8,7 +8,7 @@
         type="warning"
         @click="openReverseDialog"
         icon="refresh-left" />
-      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" @submit="submitForm" />
+      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" :data="objData" @submit="submitForm" />
     </div>
     <el-dialog v-model="reverseDialog.visible" title="冲销日期" width="400px" :close-on-click-modal="false">
       <el-form>

@@ -13,6 +13,7 @@
       @handleEvent="handleEventImp"
       @handleRowEvent="handleRowEventImp"
       @selection-change="handleSelRow"
+      :callMethod="handleCallMethod"
       row-key="bussId"
       border
       stripe />
@@ -134,6 +135,26 @@
       },
       handleRow(row, option) {
         this.szdWf.goDoc(row.routerCode, row.bussId, option);
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await listApply(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

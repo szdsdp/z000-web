@@ -66,7 +66,7 @@
         readonly
         clearable
         showHelp
-        @help="szdSh({ a: 'CORE_PROV', b: objData.header, c: ['provinceCore-prov', 'province-provSap', 'provinceName-provName'] })" />
+        @help="szdSh({ a: 'CORE_PROV', b: objData.header, c: ['provinceCore-prov', 'province-prov', 'provinceName-provName'] })" />
       <szd-input-form-item-col
         label="城市"
         :span="8"
@@ -143,7 +143,8 @@
             "BP",
             {
               "BUS_JOEL_SEARCH-PARTNER_NUMBER": custId
-            }
+            },
+            "=BUS_LOCATOR_SRCH_GO"
           );
         }
       }

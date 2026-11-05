@@ -3,7 +3,7 @@
     <div style="padding-bottom: 5px; display: flex">
       <szd-button v-if="objData.header.bussStatus === 'D'" label="出具发票" type="primary" @click="issueInvoice" icon="upload" />
       <szd-button v-if="objData.header.billDoc && !objData.header.revBillDoc" label="冲销出具发票" type="warning" @click="cancelInvoice" icon="refresh-left" />
-      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" @submit="submitForm" />
+      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" :data="objData" @submit="submitForm" />
     </div>
     <szd-tabs-wrap :top-height="SR.SRH_height" v-model:top="SR.SRH" v-model:bottom="SR.SRI">
       <template v-slot:top>

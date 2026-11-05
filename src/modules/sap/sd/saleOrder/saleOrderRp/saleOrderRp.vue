@@ -11,6 +11,7 @@
       @handleEvent="handleEventImp"
       @handleRowEvent="handleRowEventImp"
       @selection-change="handleSelRow"
+      :callMethod="handleCallMethod"
       row-key="bussId"
       border
       stripe />
@@ -46,6 +47,8 @@
             { field: "bussStatusName", label: "单据状态", minWidth: 100 },
             { field: "cmpyName", label: "公司代码", minWidth: 150 },
             { field: "cstcName", label: "部门", minWidth: 150 },
+            { field: "salesOrgName", label: "销售组织", minWidth: 150 },
+            { field: "soldToName", label: "售达方", minWidth: 150 },
             { field: "title", label: "业务标题", minWidth: 200 },
             { field: "createByName", label: "创建人", minWidth: 120 },
             { field: "createTime", label: "创建时间", minWidth: 150, type: "datetime", sort: true },
@@ -122,6 +125,26 @@
       },
       handleRow(row, option) {
         this.szdWf.goDoc(row.routerCode, row.bussId, option);
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await listApply(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

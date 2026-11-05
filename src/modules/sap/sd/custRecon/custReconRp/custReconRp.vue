@@ -11,6 +11,7 @@
       v-model:data="dataList"
       v-model:page="tableParams.page"
       @handleRequest="handleRequestImp"
+      :callMethod="handleCallMethod"
       row-key="belnrFi"
       border
       stripe />
@@ -21,12 +22,12 @@
   import { queryCustRecon } from "../api/custRecon.js";
 
   export default {
-    name: "Z000_SD_CUSTRECON_01B",
+    name: "Z000_SD_DZCX_01B",
     data() {
       return {
         queryParams: { ranges: {}, orders: [] },
         schLay: {
-          layout: { report: "Z000_SD_CUSTRECON_01B", span: 8, more: 3 },
+          layout: { report: "Z000_SD_DZCX_01B", span: 8, more: 3 },
           schCat: [
             { field: "dateRange", label: "日期", type: "date", required: true, whereOpt: "BT" },
             {
@@ -50,7 +51,7 @@
         },
         tableParams: {
           layout: {
-            report: "Z000_SD_CUSTRECON_01B",
+            report: "Z000_SD_DZCX_01B",
             showSummary: false,
             merge: "0",
             height: "calc(100vh - 220px)"
@@ -174,6 +175,26 @@
       // 表格请求回调
       handleRequestImp(obj) {
         this.getList();
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await queryCustRecon(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

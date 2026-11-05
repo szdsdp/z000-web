@@ -35,6 +35,5 @@ function submitFormCheckItem(objData, msgList) {
     z000Tool.checkNull(msgList, item.unit, "行项目[" + item.itemNo + "]-单位不能为空");
     z000Tool.checkNull(msgList, item.orderNo, "行项目[" + item.itemNo + "]-订单号不能为空");
     z000Tool.checkNull(msgList, item.orderItemNo, "行项目[" + item.itemNo + "]-订单项目编号不能为空");
-    z000Tool.checkNull(msgList, item.itemText, "行项目[" + item.itemNo + "]-项目文本不能为空");
   }
 }

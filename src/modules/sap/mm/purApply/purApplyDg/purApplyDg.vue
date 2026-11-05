@@ -3,7 +3,7 @@
     <div style="padding-bottom: 5px; display: flex">
       <szd-button v-if="objData.header.bussStatus === 'F'" label="生成采购订单" type="primary" @click="createPurOrder" icon="document-add" />
       <szd-button v-if="objData.header.bussStatus === 'D'" label="同步" type="primary" @click="syncSap" icon="refresh" />
-      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" @submit="submitForm" />
+      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" :data="objData"  @submit="submitForm" />
     </div>
     <szd-tabs-wrap :top-height="SR.SRH_height" v-model:top="SR.SRH" v-model:bottom="SR.SRI">
       <template v-slot:top>

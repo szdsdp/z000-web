@@ -11,6 +11,7 @@
       v-model:data="dataList"
       v-model:page="tableParams.page"
       @handleRequest="handleRequestImp"
+      :callMethod="handleCallMethod"
       row-key="ebelp"
       border
       stripe />
@@ -48,7 +49,7 @@
             { field: "ebeln", label: "采购凭证号", minWidth: 120 },
             { field: "ebelp", label: "项目编号", minWidth: 100 },
             { field: "matnr", label: "物料编号", minWidth: 120 },
-            { field: "txz01", label: "短文本", minWidth: 180 },
+            { field: "txz01", label: "物料名称", minWidth: 180 },
             { field: "bukrs", label: "公司代码", minWidth: 100 },
             { field: "lifnr", label: "供应商", minWidth: 100 },
             { field: "bsart", label: "采购凭证类型", minWidth: 120 },
@@ -96,6 +97,26 @@
       },
       handleRequestImp() {
         this.getList();
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await queryOrderSearch(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

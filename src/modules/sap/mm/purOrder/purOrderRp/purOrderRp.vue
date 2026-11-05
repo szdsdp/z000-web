@@ -13,6 +13,7 @@
       @handleEvent="handleEventImp"
       @handleRowEvent="handleRowEventImp"
       @selection-change="handleSelRow"
+      :callMethod="handleCallMethod"
       row-key="bussId"
       border
       stripe />
@@ -66,15 +67,6 @@
             { field: "purOrgName", label: "采购组织", minWidth: 120 },
             { field: "purGroupName", label: "采购组", minWidth: 100 },
             { field: "currName", label: "货币", minWidth: 100 },
-            { field: "storeCount", label: "入库单数量", minWidth: 100, align: "center", type: "number", numDec: 2 },
-            {
-              field: "sapStoreCount",
-              label: "SAP已入库数量",
-              minWidth: 130,
-              align: "center",
-              type: "number",
-              numDec: 2
-            },
             { field: "cmpyName", label: "公司代码", minWidth: 150 },
             { field: "cstcName", label: "部门", minWidth: 150 },
             { field: "createByName", label: "创建人", minWidth: 120 },
@@ -197,6 +189,26 @@
               });
           })
           .catch(() => {});
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await listApply(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

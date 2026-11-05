@@ -21,7 +21,7 @@ export default {
   components: {},
   data() {
     return {
-      moduleName: "demoExpCostItem",
+      moduleName: "itemList",
       tabLay: {
         layout: {report: "Z000_DEMO_EXP_01B", selection: "2", sort: "2"},
         toolbar: {

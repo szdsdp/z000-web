@@ -11,6 +11,7 @@
       v-model:page="tableParams.page"
       @handleRequest="handleRequestImp"
       @handleEvent="handleEventImp"
+      :callMethod="handleCallMethod"
       border
       stripe />
   </div>
@@ -100,6 +101,26 @@
           this.dataList = response.rows;
           this.tableParams.page.total = response.total;
         });
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await listSend(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

@@ -72,7 +72,7 @@
       <szd-select-form-item-col
         label="订单类型"
         v-model="objData.header.orderType"
-        baseField="Z000_PP_SCDDCJ_ORDER_TYPE"
+        baseField="Z000_SD_ORDER_TYPE"
         :szdopt="SR.szdopt"
         required
         clearable

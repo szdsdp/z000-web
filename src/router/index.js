@@ -25,6 +25,10 @@ export const routes = [
           keepAlive: false,
           affix: true
         }
+      },
+      {
+        path: "z000/:page(index)?",
+        redirect: "index",
       }
     ]
   },
@@ -35,9 +39,9 @@ export const routes = [
   }
 ];
 
-const baseUrl = window.__POWERED_BY_QIANKUN__ ? "/micro/" : "/";
+//路由基路径：乾坤下为 /micro/，独立运行时为 /系统代码小写/（与 publicPath、nginx 前缀保持一致）
+const baseUrl = window.__POWERED_BY_QIANKUN__ ? "/" + process.env.VUE_APP_SYS_CODE.toLowerCase() + "/" : "/";
 const router = createRouter({
-  base: window.__POWERED_BY_QIANKUN__ ? "/micro/" : "/",
   history: createWebHistory(baseUrl),
   routes
 });

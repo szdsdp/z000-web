@@ -10,6 +10,7 @@
       @handleRequest="handleRequestImp"
       @handleEvent="handleEventImp"
       @handleRowEvent="handleRowEventImp"
+      :callMethod="handleCallMethod"
       row-key="orderNo"
       border
       stripe />
@@ -83,6 +84,8 @@
             { field: "unit", label: "单位", minWidth: 80 },
             { field: "orderQty", label: "订单数量", minWidth: 120 },
             { field: "shippedQty", label: "已发货数量", minWidth: 100 },
+            { field: "receivedQty", label: "已收货数量", minWidth: 100 },
+            { field: "orderStatus", label: "订单状态", minWidth: 100 },
             { field: "startDate", label: "订单开始日期", minWidth: 110 },
             { field: "finishDate", label: "基本完成日期", minWidth: 110 },
             {
@@ -151,6 +154,26 @@
           this.dataList = response.rows;
           this.tableParams.page.total = response.total;
         });
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await listApply(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       },
       // 抽取
       handleSync() {

@@ -99,7 +99,7 @@
       </el-table-column>
       <el-table-column label="项目文本" prop="itemText" min-width="200">
         <template v-slot:header>
-          <szd-table-col-header required label="项目文本" />
+          <szd-table-col-header label="项目文本" />
         </template>
         <template v-slot="scope">
           <szd-input v-model="scope.row.itemText" :szdopt="SR.szdopt" :maxlength="50" />

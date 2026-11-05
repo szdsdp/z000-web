@@ -20,7 +20,7 @@
         type="warning"
         @click="cancelCloseSap"
         icon="circle-check" />
-      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" @submit="submitForm" />
+      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" :data="objData" @submit="submitForm" />
     </div>
     <orderCreateDgHeader :objData="objData" :SR="SR" :wfOper="wfOper" />
   </div>

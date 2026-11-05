@@ -72,7 +72,7 @@
           <szd-table-col-header required label="采购订单数量" />
         </template>
         <template v-slot="scope">
-          <szd-input v-model="scope.row.purNum" :szdopt="SR.szdopt" :maxlength="13" />
+          <szd-input v-model="scope.row.purNum" :szdopt="SR.szdopt" :maxlength="13" @change="onPurNumChange(scope.row)" />
         </template>
       </el-table-column>
       <el-table-column label="订单单位" prop="unit" min-width="100">
@@ -98,7 +98,7 @@
           <szd-table-col-header required label="交货日期" />
         </template>
         <template v-slot="scope">
-          <szd-date v-model="scope.row.deliveryDate" :szdopt="SR.szdopt" type="date" />
+          <szd-date v-model="scope.row.deliveryDate" :szdopt="SR.szdopt" type="date" @change="onDeliveryDateChange(scope.row)" />
         </template>
       </el-table-column>
       <el-table-column label="交货计划" width="100" align="center" fixed="right">
@@ -162,6 +162,45 @@
       },
       toggleSchedExpand(row, index) {
         this.$refs.schedDialog.acceptData(row);
+      },
+      // 交货日期变更时自动同步交货计划
+      onDeliveryDateChange(row) {
+        if (!this.objData.schedList) {
+          this.objData.schedList = [];
+        }
+        const scheds = this.objData.schedList.filter(s => s.itemNo === row.itemNo);
+        // 清空交货日期 → 仅1条计划时自动删除
+        if (!row.deliveryDate) {
+          if (scheds.length === 1) {
+            this.objData.schedList = this.objData.schedList.filter(s => s.itemNo !== row.itemNo);
+          }
+          return;
+        }
+        // 无计划 → 自动创建一条
+        if (scheds.length === 0) {
+          this.objData.schedList.push({
+            orderId: this.objData.header.orderId || "",
+            itemNo: row.itemNo,
+            schedLine: 1,
+            deliveryDate: row.deliveryDate,
+            quantity: row.purNum || ""
+          });
+        } else if (scheds.length === 1) {
+          // 仅1条计划 → 自动更新日期
+          scheds[0].deliveryDate = row.deliveryDate;
+        }
+        // 多条计划时不自动处理（用户已手动管理）
+      },
+      // 数量变更时自动同步交货计划数量
+      onPurNumChange(row) {
+        if (!this.objData.schedList) {
+          return;
+        }
+        const scheds = this.objData.schedList.filter(s => s.itemNo === row.itemNo);
+        // 仅1条计划时自动更新数量
+        if (scheds.length === 1) {
+          scheds[0].quantity = row.purNum || "";
+        }
       },
       handleCreateCgrk() {
         if (!this.listSel || this.listSel.length === 0) {

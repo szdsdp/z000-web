@@ -57,6 +57,11 @@
           <szd-input v-model="scope.row.orderItemNo" disabled />
         </template>
       </el-table-column>
+      <el-table-column label="订单行数量" prop="orderQty" min-width="140">
+        <template v-slot="scope">
+          <szd-input v-model="scope.row.orderQty" :szdopt="SR.szdopt" type="number" numDot :numDec="3" disabled />
+        </template>
+      </el-table-column>
       <el-table-column label="物料编码" prop="mtlCode" min-width="250">
         <template v-slot:header>
           <szd-table-col-header required label="物料编码" />
@@ -129,7 +134,7 @@
       </el-table-column>
       <el-table-column label="项目文本" prop="itemText" min-width="200">
         <template v-slot:header>
-          <szd-table-col-header label="项目文本" required />
+          <szd-table-col-header label="项目文本" />
         </template>
         <template v-slot="scope">
           <szd-input v-model="scope.row.itemText" :szdopt="SR.szdopt" :maxlength="50" />
@@ -174,11 +179,10 @@
                 mtlCode: item.matnr || "",
                 mtlName: item.txz01 || "",
                 fact: item.werks || "",
-                factName: "",
+                factName: item.werksT || "",
                 store: "",
                 quantity: 0,
-                menge: item.menge || "0",
-                zshsl: item.zshsl || "0",
+                orderQty: item.menge || "",
                 unit: item.meins || "",
                 orderNo: item.ebeln || "",
                 orderItemNo: orderItemNo,

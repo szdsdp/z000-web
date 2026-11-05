@@ -140,7 +140,7 @@
     },
     data() {
       return {
-        moduleName: "demoExpCostItem",
+        moduleName: "itemList",
         listSel: []
       };
     },

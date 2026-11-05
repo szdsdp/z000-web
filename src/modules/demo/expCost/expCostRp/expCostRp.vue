@@ -50,7 +50,6 @@
             { field: "bussDocId", label: "业务单号", minWidth: 150, sort: true },
             { field: "cmpyName", label: "公司", minWidth: 200 },
             { field: "cstcName", label: "部门", minWidth: 180 },
-            { field: "userId", label: "报账人", minWidth: 120 },
             { field: "userName", label: "报账人", minWidth: 120 },
             { field: "bstp", label: "业务类型", minWidth: 200 },
             { field: "bussDate", label: "业务日期", minWidth: 100 },

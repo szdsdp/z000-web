@@ -8,7 +8,7 @@
         type="warning"
         @click="reverseSap"
         icon="refresh-left" />
-      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" @submit="submitForm" />
+      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" :data="objData" @submit="submitForm" />
     </div>
     <szd-tabs-wrap :top-height="SR.SRH_height" v-model:top="SR.SRH" v-model:bottom="SR.SRI">
       <template v-slot:top>
@@ -111,7 +111,7 @@
         }
       },
       syncSap() {
-        syncSapApply(this.objData.header.scddbgId).then(res => {
+        syncSapApply(this.objData.header.reportId).then(res => {
           if (res.code === 200) {
             this.szdMsgBox(res.data.retMsgBox);
             this.getData();
@@ -122,7 +122,7 @@
       reverseSap() {
         this.szdPop("确定要冲销该报工单吗？", true)
           .then(() => {
-            reverseApply(this.objData.header.scddbgId).then(res => {
+            reverseApply(this.objData.header.reportId).then(res => {
               if (res.code === 200) {
                 this.szdMsgBox(res.data.retMsgBox);
                 this.getData();
@@ -148,7 +148,7 @@
           bussId: "",
           bussDocId: "",
           title: "",
-          scddbgId: "",
+          reportId: "",
           ztype: "",
           aufnr: "",
           confno: "",

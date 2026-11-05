@@ -4,7 +4,7 @@
       <szd-button v-if="objData.header.bussStatus === 'D'" label="同步" type="primary" @click="syncSap" icon="refresh" />
       <szd-button v-if="objData.header.bussStatus === 'F' && objData.header.vbeln && !objData.post.mblnr" label="发货过账" type="success" @click="postGoods" icon="upload" />
       <szd-button v-if="objData.post && objData.post.mblnr && !objData.post.revMblnr" label="冲销发货过账" type="warning" @click="reversePostGoods" icon="refresh-left" />
-      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" @submit="submitForm" />
+      <szd-wf-button :routerCode="SR.routerCode" btnHide="FGJQRS" :wfOper="wfOper" :bussBase="objData.header" :data="objData" @submit="submitForm" />
     </div>
     <szd-tabs-wrap :top-height="SR.SRH_height" v-model:top="SR.SRH" v-model:bottom="SR.SRI">
       <template v-slot:top>

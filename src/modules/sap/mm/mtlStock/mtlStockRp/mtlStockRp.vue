@@ -12,18 +12,18 @@
       v-model:page="tableParams.page"
       @handleRequest="handleRequestImp"
       @handleEvent="handleEventImp"
+      :callMethod="handleCallMethod"
       row-key="matnr"
       border
       stripe />
 
     <!-- 同步弹窗 -->
-    <el-dialog title="同步SAP库存数据" v-model="syncDialogVisible" width="500px" :close-on-click-modal="false">
+    <el-dialog title="同步SAP库存数据" v-model="syncDialogVisible" width="400px" :close-on-click-modal="false">
       <el-form label-width="50px">
         <el-form-item label="工厂" required>
           <szd-input-form-item-col
             v-model="syncForm.werks"
             :span="24"
-            :descSpan="14"
             required
             clearable
             showHelp
@@ -34,7 +34,6 @@
           <szd-input-form-item-col
             v-model="syncForm.lgort"
             :span="24"
-            :descSpan="14"
             showHelp
             clearable
             :help="{ a: 'CORE_STOR', b: syncForm, c: ['lgort-stor', 'lgortName-storName'], d: [['fact', syncForm.werks]] }"
@@ -44,7 +43,6 @@
           <szd-input-form-item-col
             v-model="syncForm.matnr"
             :span="24"
-            :descSpan="14"
             clearable
             showHelp
             :help="{ a: 'Z000_MDM_MTL', b: syncForm, c: ['matnr-mtlCode', 'matnrName-mtlName'] }"
@@ -201,6 +199,26 @@
               });
           })
           .catch(() => {});
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await queryStock(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

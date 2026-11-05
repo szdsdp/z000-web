@@ -2,7 +2,7 @@
   <div class="app-container">
     <!-- 工具栏 -->
     <div style="padding-bottom: 5px; display: flex">
-      <szd-wf-button :routerCode="SR.routerCode" :wfOper="wfOper" :bussBase="objData.header" @submit="submitForm" />
+      <szd-wf-button :routerCode="SR.routerCode" :wfOper="wfOper" :bussBase="objData.header" :data="objData" @submit="submitForm" />
     </div>
     <!-- 内容 -->
     <szd-tabs-wrap :top-height="SR.SRH_height" v-model:top="SR.SRH" v-model:bottom="SR.SRI">
@@ -21,6 +21,7 @@
   import { submitFormCheck } from "./js/expCostDgCheck";
   import expCostDgHeader from "./expCostDgHeader.vue";
   import expCostDgItem from "./expCostDgItem.vue";
+  import szdTool from "szd-client-web/client/common/tools/tool";
 
   export default {
     components: {
@@ -81,6 +82,7 @@
               }
             });
           } else {
+            this.setItemNo();
             saveApply(this.objData, wfEvt).then(response => {
               if (response.code === 200) {
                 this.wfOper.bussId = response.data.bussId;
@@ -126,6 +128,17 @@
           amtApply: 0
         };
         this.objData.itemList = [];
+      },
+      //设置行号
+      setItemNo() {
+        for (let i = 0; i < this.objData.itemList.length; i++) {
+          let item = this.objData.itemList[i];
+          if (i === 0) {
+            item.itemNo = 10;
+          } else {
+            item.itemNo = szdTool.getNextItemNo(this.objData.itemList, "itemNo");
+          }
+        }
       }
     }
   };

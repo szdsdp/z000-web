@@ -11,6 +11,7 @@
       v-model:page="tableParams.page"
       @handleRequest="handleRequestImp"
       @handleEvent="handleEventImp"
+      :callMethod="handleCallMethod"
       row-key="mtlCode"
       border
       stripe />
@@ -144,6 +145,26 @@
               });
           })
           .catch(() => {});
+      },
+      //AI回调
+      async handleCallMethod(obj) {
+        console.log("handleCallMethod", obj);
+        if (obj.fCode === "$aiPageDataList") {
+          let _query = {
+            pageNum: obj.page.pageNum,
+            pageSize: obj.page.pageSize,
+            orders: this.queryParams.orders,
+            ranges: this.queryParams.ranges
+          };
+          let response = await listApply(_query);
+          if (response.code === 200) {
+            obj.page.total = response.total;
+            return response.rows || [];
+          } else {
+            obj.page.total = 0;
+            return [];
+          }
+        }
       }
     }
   };

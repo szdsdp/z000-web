@@ -7,6 +7,7 @@
         btnHide="FGJQR"
         :wfOper="wfOper"
         :bussBase="objData.header"
+        :data="objData"
         @submit="submitForm"
         @vchView="wfVchView" />
     </div>
